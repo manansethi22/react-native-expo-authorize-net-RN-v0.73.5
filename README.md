@@ -30,7 +30,7 @@ pod install
     DATA_DESCRIPTOR = "card data descriptor"
     DATA_VALUE = "card data value"
 
-`please note: this will be used to add card on server using Accept.js from auhorize.net`
+`note: these values will be used to add card on server using Accept.js from authorize.net`
 
 ## Usage
 
