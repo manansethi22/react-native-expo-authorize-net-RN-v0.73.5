@@ -38,14 +38,25 @@ RCT_EXPORT_METHOD(getTokenWithRequestForCard:(NSDictionary *)cardValues isProduc
     request.securePaymentContainerRequest.webCheckOutDataType.token.cardCode = [cardValues valueForKey:CVV_NO];
 
     [handler getTokenWithRequest:request successHandler:^(AcceptSDKTokenResponse * _Nonnull token) {
-        //NSLog(@"success %@", token.getOpaqueData.getDataValue);
-        NSDictionary *responsDict = @{DATA_DESCRIPTOR:token.getOpaqueData.getDataDescriptor,DATA_VALUE:token.getOpaqueData.getDataValue};
-        callback(@[@YES,responsDict]);
-    } failureHandler:^(AcceptSDKErrorResponse * _Nonnull error) {        
-        // callback(@[@NO,@"Error while add card."]);
-        NSDictionary *responsDict = @{ERROR_CODE:[[[[error getMessages] getMessages] objectAtIndex:0] getCode],ERROR_TEXT:[[[[error getMessages] getMessages] objectAtIndex:0] getText]};
-        callback(@[@NO,responsDict]);
+        NSDictionary *responsDict = @{
+            @"success": @YES,
+            @"data": @{
+                DATA_DESCRIPTOR: token.getOpaqueData.getDataDescriptor,
+                DATA_VALUE: token.getOpaqueData.getDataValue
+            }
+        };
+        callback(@[responsDict]);
+    } failureHandler:^(AcceptSDKErrorResponse * _Nonnull error) {
+        NSDictionary *responsDict = @{
+            @"success": @NO,
+            @"error": @{
+                ERROR_CODE: [[[[error getMessages] getMessages] objectAtIndex:0] getCode],
+                ERROR_TEXT: [[[[error getMessages] getMessages] objectAtIndex:0] getText]
+            }
+        };
+        callback(@[responsDict]);
     }];
+
     
 }
 
