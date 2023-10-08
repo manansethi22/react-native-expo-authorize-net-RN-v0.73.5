@@ -1,4 +1,3 @@
-
 package com.reactlibrary.authorizenet;
 
 import android.app.Activity;
@@ -8,7 +7,7 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 
@@ -27,109 +26,94 @@ import java.util.HashMap;
 
 public class RNAuthorizeNetModule extends ReactContextBaseJavaModule {
 
-  static String CARD_NO = "CARD_NO";
-  static String EXPIRATION_MONTH = "EXPIRATION_MONTH";
-  static String EXPIRATION_YEAR = "EXPIRATION_YEAR";
-  static String CVV_NO = "CVV_NO";
-  static String ZIP_CODE = "ZIP_CODE";
-  static String CARD_HOLDER_NAME = "CARD_HOLDER_NAME";
-  static String LOGIN_ID = "LOGIN_ID";
-  static String CLIENT_KEY = "CLIENT_KEY";
-  static String ACCOUNT_HOLDER_NAME = "ACCOUNT_HOLDER_NAME";
-  static String ACCOUNT_HOLDER_EMAIL = "ACCOUNT_HOLDER_EMAIL";
-  static String DATA_DESCRIPTOR = "DATA_DESCRIPTOR";
-  static String DATA_VALUE = "DATA_VALUE";
-  static String ERROR_CODE = "ERROR_CODE";
-  static String ERROR_TEXT = "ERROR_TEXT";
-  private final ReactApplicationContext reactContext;
-  private static Activity mCurrentActivity = null;
+    static String CARD_NO = "CARD_NO";
+    static String EXPIRATION_MONTH = "EXPIRATION_MONTH";
+    static String EXPIRATION_YEAR = "EXPIRATION_YEAR";
+    static String CVV_NO = "CVV_NO";
+    static String ZIP_CODE = "ZIP_CODE";
+    static String CARD_HOLDER_NAME = "CARD_HOLDER_NAME";
+    static String LOGIN_ID = "LOGIN_ID";
+    static String CLIENT_KEY = "CLIENT_KEY";
+    static String ACCOUNT_HOLDER_NAME = "ACCOUNT_HOLDER_NAME";
+    static String ACCOUNT_HOLDER_EMAIL = "ACCOUNT_HOLDER_EMAIL";
+    static String DATA_DESCRIPTOR = "DATA_DESCRIPTOR";
+    static String DATA_VALUE = "DATA_VALUE";
+    static String ERROR_CODE = "ERROR_CODE";
+    static String ERROR_TEXT = "ERROR_TEXT";
+    private final ReactApplicationContext reactContext;
+    private static Activity mCurrentActivity = null;
 
-  AcceptSDKApiClient apiClient;
+    AcceptSDKApiClient apiClient;
 
-
-  public CardData prepareCardDataFromFields(ReadableMap cardValue){
-    CardData cardData = new CardData.Builder(cardValue.getString(CARD_NO),
-            cardValue.getString(EXPIRATION_MONTH),
-            cardValue.getString(EXPIRATION_YEAR))
-            .cvvCode(cardValue.getString(CVV_NO)) // Optional
-            //.zipCode(ZIP_CODE)// Optional
-            //.cardHolderName(CARD_HOLDER_NAME)// Optional
-            .build();
-    return cardData;
-  }
-
-
-
-
-  private EncryptTransactionObject prepareTransactionObject(ReadableMap cardValue) {
-    ClientKeyBasedMerchantAuthentication merchantAuthentication =
-            ClientKeyBasedMerchantAuthentication.
-                    createMerchantAuthentication(cardValue.getString(LOGIN_ID), cardValue.getString(CLIENT_KEY));
-
-    // create a transaction object by calling the predefined api for creation
-    return TransactionObject.
-            createTransactionObject(
-                    TransactionType.SDK_TRANSACTION_ENCRYPTION) // type of transaction object
-            .cardData(prepareCardDataFromFields(cardValue)) // card data to get Token
-            .merchantAuthentication(merchantAuthentication).build();
-  }
-
-
-  public RNAuthorizeNetModule(ReactApplicationContext reactContext) {
-    super(reactContext);
-    this.reactContext = reactContext;
-
-  }
-
-
-
-
-
-  @Override
-  public String getName() {
-    return "RNAuthorizeNet";
-  }
-
-  @ReactMethod
-  public void getTokenWithRequestForCard(ReadableMap cardValue,boolean isProduction, final Callback responseCallBack){
-    try {
-      if(isProduction == true){
-        apiClient = new AcceptSDKApiClient.Builder (reactContext,
-                AcceptSDKApiClient.Environment.PRODUCTION)
-                .connectionTimeout(5000) // optional connection time out in milliseconds
+    public CardData prepareCardDataFromFields(ReadableMap cardValue) {
+        CardData cardData = new CardData.Builder(cardValue.getString(CARD_NO),
+                cardValue.getString(EXPIRATION_MONTH),
+                cardValue.getString(EXPIRATION_YEAR))
+                .cvvCode(cardValue.getString(CVV_NO)) // Optional
+                //.zipCode(ZIP_CODE)// Optional
+                //.cardHolderName(CARD_HOLDER_NAME)// Optional
                 .build();
-      }else{
-        apiClient = new AcceptSDKApiClient.Builder (reactContext,
-                AcceptSDKApiClient.Environment.SANDBOX)
-                .connectionTimeout(5000) // optional connection time out in milliseconds
-                .build();
-      }
-      EncryptTransactionObject transactionObject = prepareTransactionObject(cardValue);
-      apiClient.getTokenWithRequest(transactionObject, new EncryptTransactionCallback() {
-        @Override
-        public void onErrorReceived(ErrorTransactionResponse response) {
-          Message error = response.getFirstErrorMessage();
-          WritableMap errorResponse = Arguments.createMap();
-          errorResponse.putString(ERROR_CODE,error.getMessageCode());
-          errorResponse.putString(ERROR_TEXT,error.getMessageText());
-          // responseCallBack.invoke(false,"Error while add card.");
-          responseCallBack.invoke(false,errorResponse);
-        }
-
-        @Override
-        public void onEncryptionFinished(EncryptTransactionResponse response) {
-          WritableMap cardResponse = Arguments.createMap();
-          cardResponse.putString(DATA_DESCRIPTOR,response.getDataDescriptor());
-          cardResponse.putString(DATA_VALUE,response.getDataValue());
-          responseCallBack.invoke(true,cardResponse);
-        }
-      });
-
-    } catch (Exception e) {
-      // Handle exception transactionObject or callback is null.
-      responseCallBack.invoke(false,"Error while add card.");
+        return cardData;
     }
-  }
 
+    private EncryptTransactionObject prepareTransactionObject(ReadableMap cardValue) {
+        ClientKeyBasedMerchantAuthentication merchantAuthentication =
+                ClientKeyBasedMerchantAuthentication.
+                        createMerchantAuthentication(cardValue.getString(LOGIN_ID), cardValue.getString(CLIENT_KEY));
 
+        // create a transaction object by calling the predefined api for creation
+        return TransactionObject.
+                createTransactionObject(
+                        TransactionType.SDK_TRANSACTION_ENCRYPTION) // type of transaction object
+                .cardData(prepareCardDataFromFields(cardValue)) // card data to get Token
+                .merchantAuthentication(merchantAuthentication).build();
+    }
+
+    public RNAuthorizeNetModule(ReactApplicationContext reactContext) {
+        super(reactContext);
+        this.reactContext = reactContext;
+    }
+
+    @Override
+    public String getName() {
+        return "RNAuthorizeNet";
+    }
+
+    @ReactMethod
+    public void getTokenWithRequestForCard(ReadableMap cardValue, boolean isProduction, final Promise promise) {
+        try {
+            if (isProduction == true) {
+                apiClient = new AcceptSDKApiClient.Builder(reactContext,
+                        AcceptSDKApiClient.Environment.PRODUCTION)
+                        .connectionTimeout(5000) // optional connection time out in milliseconds
+                        .build();
+            } else {
+                apiClient = new AcceptSDKApiClient.Builder(reactContext,
+                        AcceptSDKApiClient.Environment.SANDBOX)
+                        .connectionTimeout(5000) // optional connection time out in milliseconds
+                        .build();
+            }
+            EncryptTransactionObject transactionObject = prepareTransactionObject(cardValue);
+            apiClient.getTokenWithRequest(transactionObject, new EncryptTransactionCallback() {
+                @Override
+                public void onErrorReceived(ErrorTransactionResponse response) {
+                    Message error = response.getFirstErrorMessage();
+                    WritableMap errorResponse = Arguments.createMap();
+                    errorResponse.putString(ERROR_CODE, error.getMessageCode());
+                    errorResponse.putString(ERROR_TEXT, error.getMessageText());
+                    promise.reject("TOKEN_ERROR", "Error while adding card.", errorResponse);
+                }
+
+                @Override
+                public void onEncryptionFinished(EncryptTransactionResponse response) {
+                    WritableMap cardResponse = Arguments.createMap();
+                    cardResponse.putString(DATA_DESCRIPTOR, response.getDataDescriptor());
+                    cardResponse.putString(DATA_VALUE, response.getDataValue());
+                    promise.resolve(cardResponse);
+                }
+            });
+        } catch (Exception e) {
+            promise.reject("TOKEN_ERROR", "Error while adding card.");
+        }
+    }
 }
