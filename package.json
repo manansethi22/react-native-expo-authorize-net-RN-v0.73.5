@@ -1,6 +1,6 @@
 {
   "name": "react-native-expo-authorize-net",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "Native module wrapper for Accept.js Authorize.net",
   "main": "index.js",
   "scripts": {
@@ -11,10 +11,10 @@
     "authorize.net",
     "acceptsdk"
   ],
-  "author": "Sergey Kovalenko",
+  "author": "Peter Machowski",
   "license": "MIT",
   "peerDependencies": {
-    "react-native": "^0.72.5"
+    "react-native": "0.72.5"
   },
   "dependencies": {}
 }

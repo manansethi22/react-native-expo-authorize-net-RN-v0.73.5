@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.homepage     = "https://github.com/Reliantid/react-native-reliantid-authorize-net"
 
   s.requires_arc = true
-  s.platform     = :ios, "17.0"
+  s.platform     = :ios, "13.0"
 
   s.source       = { :git => "https://github.com/Reliantid/react-native-reliantid-authorize-net.git", :tag => "v#{s.version}" }
   s.source_files  = "ios/*.{h,m}"
