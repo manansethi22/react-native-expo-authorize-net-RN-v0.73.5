@@ -18,10 +18,10 @@ Pod::Spec.new do |s|
   s.source_files  = "ios/*.{h,m}"
 
   s.pod_target_xcconfig = {
-    "EXCLUDED_ARCHS[sdk=iphonesimulator*]" => "arm64",
+    # "EXCLUDED_ARCHS[sdk=iphonesimulator*]" => "arm64",
     "ONLY_ACTIVE_ARCH" => "YES"
   }
-  s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
+  # s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
 
   s.dependency "React"
   s.dependency "AuthorizeNetAccept", "~> 0.5.0"
