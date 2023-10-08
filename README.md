@@ -35,7 +35,8 @@ pod install
 ## Usage
 
 ```js
-import RNAuthorizeNet from '/module/path'` 
+import { NativeModules } from 'react-native'
+const { RNAuthorizeNet } = NativeModules;
 ```
 
 ```js
