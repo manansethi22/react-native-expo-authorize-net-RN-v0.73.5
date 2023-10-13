@@ -1,4 +1,3 @@
-//#import <AuthorizeNetAccept/AuthorizeNetAccept-Swift.h>
 #import "RNAuthorizeNet.h"
 @import AuthorizeNetAccept;
 
@@ -25,39 +24,25 @@ static NSString *const ERROR_TEXT = @"ERROR_TEXT";
 
 RCT_EXPORT_MODULE()
 
-RCT_EXPORT_METHOD(getTokenWithRequestForCard:(NSDictionary *)cardValues isProduction:(BOOL)isProduction  callBack:(RCTResponseSenderBlock)callback)
+RCT_EXPORT_METHOD(getTokenWithRequestForCard:(NSDictionary *)cardValues isProduction:(BOOL)isProduction resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-    AcceptSDKHandler *handler = [[AcceptSDKHandler alloc] initWithEnvironment:isProduction?AcceptSDKEnvironmentENV_LIVE:AcceptSDKEnvironmentENV_TEST];
+    AcceptSDKHandler *handler = [[AcceptSDKHandler alloc] initWithEnvironment:isProduction ? AcceptSDKEnvironmentENV_LIVE : AcceptSDKEnvironmentENV_TEST];
     AcceptSDKRequest *request = [[AcceptSDKRequest alloc] init];
-    request.merchantAuthentication.name =[cardValues valueForKey:LOGIN_ID];
-    request.merchantAuthentication.clientKey =[cardValues valueForKey:CLIENT_KEY];
+    request.merchantAuthentication.name = [cardValues valueForKey:LOGIN_ID];
+    request.merchantAuthentication.clientKey = [cardValues valueForKey:CLIENT_KEY];
 
-    request.securePaymentContainerRequest.webCheckOutDataType.token.cardNumber =[cardValues valueForKey:CARD_NO];
+    request.securePaymentContainerRequest.webCheckOutDataType.token.cardNumber = [cardValues valueForKey:CARD_NO];
     request.securePaymentContainerRequest.webCheckOutDataType.token.expirationMonth = [cardValues valueForKey:EXPIRATION_MONTH];
     request.securePaymentContainerRequest.webCheckOutDataType.token.expirationYear = [cardValues valueForKey:EXPIRATION_YEAR];
     request.securePaymentContainerRequest.webCheckOutDataType.token.cardCode = [cardValues valueForKey:CVV_NO];
 
     [handler getTokenWithRequest:request successHandler:^(AcceptSDKTokenResponse * _Nonnull token) {
-        NSDictionary *responsDict = @{
-            @"success": @YES,
-            @"data": @{
-                DATA_DESCRIPTOR: token.getOpaqueData.getDataDescriptor,
-                DATA_VALUE: token.getOpaqueData.getDataValue
-            }
-        };
-        callback(@[responsDict]);
+        NSDictionary *responsDict = @{DATA_DESCRIPTOR:token.getOpaqueData.getDataDescriptor, DATA_VALUE:token.getOpaqueData.getDataValue};
+        resolve(responsDict);
     } failureHandler:^(AcceptSDKErrorResponse * _Nonnull error) {
-        NSDictionary *responsDict = @{
-            @"success": @NO,
-            @"error": @{
-                ERROR_CODE: [[[[error getMessages] getMessages] objectAtIndex:0] getCode],
-                ERROR_TEXT: [[[[error getMessages] getMessages] objectAtIndex:0] getText]
-            }
-        };
-        callback(@[responsDict]);
+        NSDictionary *responsDict = @{ERROR_CODE:[[[[error getMessages] getMessages] objectAtIndex:0] getCode], ERROR_TEXT:[[[[error getMessages] getMessages] objectAtIndex:0] getText]};
+        reject(@"TOKEN_ERROR", @"Error while getting token.", responsDict);
     }];
-
-    
 }
 
 @end

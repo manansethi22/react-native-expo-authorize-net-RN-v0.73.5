@@ -1,20 +1,22 @@
 {
   "name": "react-native-expo-authorize-net",
-  "version": "1.3.4",
-  "description": "Native module wrapper for Accept.js Authorize.net",
+  "version": "0.0.1",
+  "description": "`react-native-expo-authorize-net` is a package that allows you to: Fetch token by sending `card detail` to `AcceptSDK` for iOS and Android (Expo platform). You need to use this token to get the values of `DATA DESCRIPTOR` and `DATA VALUE` from the token.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "author": "Peter Machowski",
+  "contributors": [
+    "Anthony Coffey"
+  ],
+  "license": "MIT",
   "keywords": [
     "react-native",
     "authorize.net",
     "acceptsdk"
   ],
-  "author": "Peter Machowski",
-  "license": "MIT",
   "peerDependencies": {
-    "react-native": "0.72.5"
-  },
-  "dependencies": {}
+    "react-native": "^0.72.5"
+  }
 }
