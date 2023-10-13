@@ -1,0 +1,9 @@
+{
+  "platforms": ["ios", "android"],
+  "ios": {
+    "modules": ["AuthorizeNetAccept"]
+  },
+  "android": {
+    "modules": ["net.authorize.acceptsdk.AcceptSDKApiClient"]
+  }
+}
