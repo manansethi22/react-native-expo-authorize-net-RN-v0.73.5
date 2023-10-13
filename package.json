@@ -1,6 +1,6 @@
 {
   "name": "react-native-expo-authorize-net",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "`react-native-expo-authorize-net` is a package that allows you to: Fetch token by sending `card detail` to `AcceptSDK` for iOS and Android (Expo platform). You need to use this token to get the values of `DATA DESCRIPTOR` and `DATA VALUE` from the token.",
   "main": "index.js",
   "scripts": {
@@ -17,6 +17,6 @@
     "acceptsdk"
   ],
   "peerDependencies": {
-    "react-native": "^0.72.5"
+    "react-native": "^0.63.0"
   }
 }
