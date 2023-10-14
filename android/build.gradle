@@ -34,5 +34,5 @@ android {
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
-    implementation 'com.github.AuthorizeNet:accept-sdk-android:1.0.4'
+    implementation 'com.github.AuthorizeNet:accept-sdk-android:1.04'
 }
