@@ -21,8 +21,8 @@ android {
     buildToolsVersion safeExtGet('buildToolsVersion', '28.0.3')
 
     defaultConfig {
-        minSdkVersion safeExtGet('minSdkVersion', 21)
-        targetSdkVersion safeExtGet('targetSdkVersion', 23)
+        minSdkVersion safeExtGet('minSdkVersion', 26)
+        targetSdkVersion safeExtGet('targetSdkVersion', 26)
 
         versionCode 1
         versionName "1.0"
@@ -34,5 +34,5 @@ android {
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
-    implementation files('./accept-sdk/accept-sdk-android-debug.aar')
+    implementation 'com.github.AuthorizeNet:accept-sdk-android:1.0.4'
 }
