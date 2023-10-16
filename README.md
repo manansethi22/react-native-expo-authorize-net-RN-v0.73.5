@@ -34,13 +34,16 @@ pod install
 
 ## Usage
 
+### Import
+
 ```js
-import { NativeModules } from 'react-native'
+import { NativeModules } from 'react-native';
 const { RNAuthorizeNet } = NativeModules;
 ```
 
-```js
+### Implementation
 
+```js
 // note: object properties must be exactly like they are shown here
 const isProduction = process.env.NODE_ENV === 'production'; // true | false
 const cardValues = {
@@ -57,25 +60,16 @@ const cardValues = {
  *
  * @param {Object} cardValues - An object containing card info and auth.net credentials.
  * @param {boolean} isProduction - A flag indicating whether the production environment should be used.
- * @param {Function} callback - A callback function to handle the response.
- *                             It receives an object with properties: success, data, and error.
- * @returns {void}
+ * @returns {Promise} A promise that resolves with the payment token or rejects with an error
  */
 
-RNAuthorizeNet.getTokenWithRequestForCard(
-  cardValues,
-  isProduction,
-  function (response: any) {
-    const { success, data, error } = response;
-    if (success) {
-      console.log('Success:', data);
-      // Access individual properties in data as needed
-    } else {
-      console.log('Error:', error);
-      // Access error properties in error as needed
-    }
-  }
-);
+RNAuthorizeNet.getTokenWithRequestForCard(cardValues, isProduction)
+  .then((response) => {
+    console.log(response);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
 ```
 
 ### Original Author
