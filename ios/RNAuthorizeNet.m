@@ -40,8 +40,19 @@ RCT_EXPORT_METHOD(getTokenWithRequestForCard:(NSDictionary *)cardValues isProduc
         NSDictionary *responsDict = @{DATA_DESCRIPTOR:token.getOpaqueData.getDataDescriptor, DATA_VALUE:token.getOpaqueData.getDataValue};
         resolve(responsDict);
     } failureHandler:^(AcceptSDKErrorResponse * _Nonnull error) {
-        NSDictionary *responsDict = @{ERROR_CODE:[[[[error getMessages] getMessages] objectAtIndex:0] getCode], ERROR_TEXT:[[[[error getMessages] getMessages] objectAtIndex:0] getText]};
-        reject(@"TOKEN_ERROR", @"Error while getting token.", responsDict);
+      
+        NSLog(@"Error occurred: %@ - %@", error.getMessages.getResultCode, error.getMessages.getMessages[0].getCode);
+        NSString *errorCode = error.getMessages.getMessages[0].getCode;
+        NSString *errorText = error.getMessages.getMessages[0].getText;
+
+        NSLog(@"Error occurred: %@ - %@", errorCode, errorText);
+
+        NSDictionary *errorDict = @{
+            @"ERROR_CODE": errorCode,
+            @"ERROR_TEXT": errorText
+        };
+
+        reject(errorCode, errorText, nil);
     }];
 }
 
