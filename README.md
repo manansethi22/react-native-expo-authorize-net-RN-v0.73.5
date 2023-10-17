@@ -68,7 +68,8 @@ RNAuthorizeNet.getTokenWithRequestForCard(cardValues, isProduction)
     console.log(response);
   })
   .catch((error) => {
-    console.log(error);
+    const { code, message } = error;
+    console.log({ code, message });
   });
 ```
 
