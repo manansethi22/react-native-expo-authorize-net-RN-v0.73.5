@@ -64,14 +64,30 @@ const cardValues = {
  */
 
 RNAuthorizeNet.getTokenWithRequestForCard(cardValues, isProduction)
-  .then((response) => {
+  .then(response => {
     console.log(response);
   })
-  .catch((error) => {
-    const { code, message } = error;
-    console.log({ code, message });
+  .catch((error: any) => {
+    if (Platform.OS === 'ios') {
+      const { code, message } = error;
+      const alertMsg: string = `${message}\n\nError Code: ${code}`;
+      Alert.alert('Error', alertMsg, [{ text: 'OK' }], {
+        cancelable: false,
+      });
+    } else if (Platform.OS === 'android') {
+      const { userInfo } = error;
+      const { ERROR_TEXT, ERROR_CODE } = userInfo;
+      const alertMsg: string = `${ERROR_TEXT}\n\nError Code: ${ERROR_CODE}`;
+      Alert.alert('Error', alertMsg, [{ text: 'OK' }], {
+        cancelable: false,
+      });
+    }
   });
 ```
+
+`Note: The error handling is different on each platform`
+
+The above implementation worked for me on both platforms. I hope this example code saves someone the countless hours it took me to promisify Peter's original code and get error handling working as expected.
 
 ### Original Author
 
