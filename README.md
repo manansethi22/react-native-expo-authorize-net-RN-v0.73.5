@@ -89,6 +89,30 @@ RNAuthorizeNet.getTokenWithRequestForCard(cardValues, isProduction)
 
 The above implementation worked for me on both platforms. I hope this example code saves someone the countless hours it took me to promisify Peter's original code and get error handling working as expected.
 
+### expo-build-properties
+
+Please note, the Android module includes some code that requires minSdkVersion 21, but Expo allows us to configure this in `app.json` via `expo-build-properties`.
+
+```json
+{
+  "expo": {
+    "plugins": [
+      "expo-router",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 26
+          },
+          "ios": {}
+        }
+      ]
+    ]
+  }
+}
+```
+
+
 ### Original Author
 
 - [Peter Machowski](mailto:peter@reliantid.com)
