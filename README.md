@@ -111,12 +111,3 @@ Please note, the Android module includes some code that requires minSdkVersion 2
   }
 }
 ```
-
-
-### Original Author
-
-- [Peter Machowski](mailto:peter@reliantid.com)
-
-### Contributor
-
-- [Anthony Coffey](https://linktr.ee/coffeycodes)
