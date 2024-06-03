@@ -1,4 +1,4 @@
-# React Native Authorize.net for Expo SDK v49
+# React Native Authorize.net for Expo SDK v50
 
 - Fetch token by sending card details to `AcceptSDK` for iOS and Android.
 
